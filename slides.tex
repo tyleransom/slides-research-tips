@@ -1,0 +1,456 @@
+\documentclass[notes,12pt, aspectratio=169]{beamer}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{pgfpages}
+\usepackage{pgfplots}
+
+% These slides also contain speaker notes. You can print just the slides,
+% just the notes, or both, depending on the setting below. Comment out the want
+% you want.
+%\setbeameroption{hide notes} % Only slide
+%\setbeameroption{show only notes} % Only notes
+%\setbeameroption{show notes on second screen=right} % Both
+
+\usepackage{FiraSans,FiraMono}
+%\usepackage{helvet}
+%\usepackage[default]{lato}
+\usepackage{array}
+
+
+\usepackage{tikz}
+\usepackage{verbatim}
+%\usepackage{fancyvrb}
+\setbeamertemplate{note page}{\pagecolor{yellow!5}\insertnote}
+\usetikzlibrary{positioning}
+\usetikzlibrary{snakes}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{matrix,shapes,arrows,fit}
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{lipsum}
+\usepackage{multimedia}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{dcolumn}
+%\usepackage{bbm}
+\newcolumntype{d}[0]{D{.}{.}{5}}
+
+
+\def\cdf(#1)(#2)(#3){0.5*(1+(erf((#1-#2)/(#3*sqrt(2)))))}%
+
+\tikzset{
+    declare function={
+        normcdf(\x,\m,\s)=1/(1 + exp(-0.07056*((\x-\m)/\s)^3 - 1.5976*(\x-\m)/\s));
+    }
+}
+\tikzset{
+    declare function={
+        logit(\x)=exp(\x)/(1+exp(\x));
+    }
+}
+
+
+
+
+\usepackage{changepage}
+\usepackage{appendixnumberbeamer}
+\newcommand{\beginbackup}{
+   \newcounter{framenumbervorappendix}
+   \setcounter{framenumbervorappendix}{\value{framenumber}}
+   \setbeamertemplate{footline}
+   {
+     \leavevmode%
+     \hline
+     box{%
+       \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,right]{footlinecolor}%
+%         \insertframenumber  \hspace*{2ex}
+       \end{beamercolorbox}}%
+     \vskip0pt%
+   }
+ }
+\newcommand{\backupend}{
+   \addtocounter{framenumbervorappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumbervorappendix}}
+}
+
+
+\usepackage{graphicx}
+\usepackage[space]{grffile}
+\usepackage{booktabs}
+
+% These are my colors -- there are many like them, but these ones are mine.
+\definecolor{oucrimson}{RGB}{132,22,23} % OU crimson
+%\definecolor{blue}{RGB}{92,138,168} % ice blue
+\definecolor{pgpblue}{RGB}{0,114,178} % pgp blue
+\definecolor{red}{RGB}{213,94,0}
+\definecolor{yellow}{RGB}{240,228,66}
+\definecolor{green}{RGB}{0,158,115}
+\definecolor{oucream}{RGB}{240,235,196}
+
+
+\hypersetup{
+  colorlinks=false,
+  linkbordercolor = {white},
+  linkcolor = {oucrimson}
+}
+
+
+%% I use a beige off white for my background
+\definecolor{PGPBackground}{RGB}{255,253,218} % PGP
+%\definecolor{MyBackground}{RGB}{240,247,255} % blue ice
+\definecolor{MyBackground}{RGB}{240,235,196} % OU cream
+
+%% Uncomment this if you want to change the background color to something else
+\setbeamercolor{background canvas}{bg=PGPBackground}
+
+%% Change the bg color to adjust your transition slide background color!
+\newenvironment{transitionframe}{
+  \setbeamercolor{background canvas}{bg=MyBackground}
+  \begin{frame}}{
+    \end{frame}
+}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamerfont{alerted text}{series=\bfseries}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamercolor{frametitle}{fg=oucrimson}
+\setbeamercolor{title}{fg=black}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}{-}
+\setbeamercolor{itemize item}{fg=oucrimson}
+\setbeamercolor{itemize subitem}{fg=oucrimson}
+\setbeamercolor{enumerate item}{fg=oucrimson}
+\setbeamercolor{enumerate subitem}{fg=oucrimson}
+\setbeamercolor{enumerate subsubitem}{fg=oucrimson}
+\setbeamercolor{alerted text}{fg=oucrimson}
+\setbeamercolor{button}{bg=MyBackground,fg=oucrimson,}
+
+% If you like road maps, rather than having clutter at the top, have a roadmap show up at the end of each section
+% (and after your introduction)
+% Uncomment this is if you want the roadmap!
+% \AtBeginSection[]
+% {
+%    \begin{frame}
+%        \frametitle{Roadmap of Talk}
+%        \tableofcontents[currentsection]
+%    \end{frame}
+% }
+\setbeamercolor{description item}{fg=oucrimson}
+\setbeamercolor{section in toc}{fg=oucrimson}
+\setbeamercolor{subsection in toc}{fg=red}
+\setbeamersize{text margin left=1em,text margin right=1em}
+
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{15pt}}{\enditemize}
+\newenvironment{wideenum}{\enumerate\addtolength{\itemsep}{15pt}}{\endenumerate}
+\newenvironment{widedescription}{\description\addtolength{\itemsep}{15pt}}{\enddescription}
+
+%\newenvironment{mathalertenv}{\begin{altenv}%
+%      {\usebeamertemplate{alerted text begin}\mathbf{alerted text}\usebeamerfont{alerted text}}
+%      {\usebeamertemplate{alerted text end}}{\end{altenv}}
+%
+%\newcommand<>{\mathalert}[1]{{%
+%  \begin{mathalertenv}{#1}\end{mathalertenv}%
+%}}
+
+
+\title[]{\textcolor{oucrimson}{Becoming a Successful Researcher}}
+\author{Tyler Ransom}
+\institute{University of Oklahoma}
+\date{April 4, 2023}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\begin{wideitemize}
+    \item Coming up with research ideas
+    \item Producing research that can be consumed by others
+    \begin{wideitemize}
+        \vspace{5mm}
+        \item Strategic planning
+        \item Research tools
+        \item Getting and incorporating feedback
+        \item Steps to writing an academic paper
+    \end{wideitemize}
+\end{wideitemize}
+\end{frame}
+
+\section{Coming up with research ideas}
+\begin{transitionframe}
+  \begin{center}
+    { \Huge \textcolor{black}{Coming up with research ideas}}
+  \end{center}
+\end{transitionframe}
+
+
+\begin{frame}{The ideal academic project}
+\begin{wideitemize}
+\item Fits in the ``adjacent possible'': just beyond the frontier but still tractable
+\item Something that you are deeply interested in
+\item Something you are willing to spend hours and hours on
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Reading as idea generation}
+\begin{wideitemize}
+\item Can't know what's in the ``adjacent possible'' without reading
+\item Read academic papers, books, popular press, blog posts, tweets, listen to podcasts, etc.
+\item For academic lit reviews, most topics have a ``handbook'' chapter that outlines the main ideas of the corresponding literature topic
+\item Most of the time, ideas require ``curing time'' in your brain
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Feedback from others}
+\begin{wideitemize}
+\item Dissertation committee members can help you figure out what is a feasible idea
+\item You should also seek feedback from your classmates and others
+\item Non-economists often provide excellent high-level feedback
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Getting ideas from others}
+\begin{wideitemize}
+\item Ideas are not the limiting factor in the production of research
+\item The limiting factor is time
+\item If you walk up to a randomly chosen economist, they will likely have at least 10 ideas that they would like to work on ``someday'' but haven't had the time/inclination to
+\item If you share a research interest, this can be another source of ideas
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Store ideas in a trusted system}
+\begin{wideitemize}
+\item Your brain will be more likely to produce ideas if it is confident that past ideas won't get lost
+\item Come up with a dedicated system for recording research ideas
+\item This could be ``low tech'' in the form of a paper notebook, or ``high tech'' in the form of a Google doc or Trello board
+\item The point is to have a system so that the brain trusts you
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Store readings in a trusted system}
+\begin{wideitemize}
+\item When reading something, take notes in a system such that you'll be able to refer back to what the main ideas were and how they might relate to your topic
+\item Again, this could be as ``low tech'' or ``high tech'' as you like
+\item The goal is to not double your work (i.e. you don't want to have to re-read the article at the time of citation)
+\end{wideitemize}
+\end{frame}
+
+
+\section{Producing research that can be consumed by others}
+\begin{transitionframe}
+  \begin{center}
+    { \Huge \textcolor{black}{Producing research that can be consumed by others}}
+  \end{center}
+\end{transitionframe}
+
+
+
+
+\begin{frame}{Strategic planning}
+\begin{wideitemize}
+\item Time is the most precious resource, so should be handled with most care
+\item I follow Cal Newport's strategic planning system:
+    \begin{wideitemize}
+    \vspace{5mm}
+    \item Semesterly plan
+    \item Weekly plan
+    \item Daily time-blocking plan
+    \item Managing/automating all tasks using Trello boards (with separate boards for research, teaching, service/admin, free time, and reading lists)
+    \item Setting lifestyle goals alongside career goals
+    \end{wideitemize}
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Semesterly plan}
+\begin{wideitemize}
+\item This is a high-level plan that covers big accomplishments that you'd like to accomplish that semester
+\item e.g. ``general exam'' or ``finish draft of manuscript'' or even ``complete data section of manuscript''
+\item I usually put no more than 6 items here, and I usually only accomplish 3 or 4
+\item Input from your supervisor(s) can be instrumental in helping you identify what you should be focusing on that semester
+\item You should also set aside time to acquire new methodological tools
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Weekly plan}
+\begin{wideitemize}
+\item On a weekly basis, refer back to the semesterly plan to ensure adequate progress is being made on each goal
+\item Then, identify ``big rocks'' in your week and put those on your calendar
+\item Then start filling in free spots with ``appointments'' to work on smaller goals that work towards your semester-level goals
+\item I keep track of ongoing commitments with Trello cards, and each week I review which cards will be due in the coming week and put these into my weekly plan
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Daily plan}
+\begin{wideitemize}
+\item Each day, divide your work hours into 30-minute increments
+\item Assign each 30-minute increment a job (``lunch'' could be a job...)
+\item Then do your best to stick to that schedule
+\item Try not to work with your email, social media, or other distractions continuously open
+\item Rather, put ``check email'' as one of the 30-minute available blocks, perhaps 2x or 3x each day
+\end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Allowing for mistakes in the plan}
+\begin{wideitemize}
+\item Research is messy and rarely do things go according to plan
+\item You should recognize this and not wallow in despair if things go off the rails
+\item The important thing is to keep pressing forward
+\item Japanese proverb: \textit{Nana korobi ya oki} (``fall down seven times, stand up eight'')
+\end{wideitemize}
+\end{frame}
+
+
+
+\begin{frame}{Research tools}
+\begin{wideitemize}
+\item Tools will enhance your productivity if used properly
+    \begin{wideitemize}
+    \vspace{5mm}
+    \item Trello for task-tracking
+    \item GitHub for tracking changes in and ensuring replicability of code
+    \item \textcolor{oucrimson}{\href{https://guides.library.upenn.edu/citationmgmt}{\texttt{Many citation management tools}}} that automate the process of producing bibliographies or tracking down references
+    \item ChatGPT and GPT-4 are new AI tools that have general applicability to many ``knowledge work'' tasks
+    \end{wideitemize}
+\item You avoid mastering these tools to your detriment
+\item Mastering a tool takes time but usually has compounding benefits
+\end{wideitemize}
+\end{frame}
+
+
+
+\begin{frame}{Getting and incorporating feedback}
+\begin{wideitemize}
+\item Research is a collaborative endeavor
+\item Feedback $\uparrow$ $\Rightarrow$ Research quality $\uparrow$
+\item Sources of feedback:
+    \begin{wideitemize}
+    \vspace{5mm}
+    \item presentations (in-class, brown bag, conferences, general exam, final defense)
+    \item meetings with advisors
+    \item AI bots
+    \end{wideitemize}
+\item You shouldn't be afraid of asking for feedback
+\item But you should also be respectful of others' time
+\end{wideitemize}
+\end{frame}
+
+
+
+\begin{frame}{Presentations}
+\begin{wideitemize}
+\item Research is communicated through writing and oral presentation
+\item The more you practice giving presentations, the better you'll be
+\item Better to make mistakes in a low-stakes environment
+\item \textit{Better Presentations} is a book that details how to present better
+\item Always remember: you are the expert on what you're presenting!
+\end{wideitemize}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Writing a paper}
+\begin{wideitemize}
+\item It can seem overwhelming to write a paper 
+\item The key is to break it down into manageable tasks
+\item Chronological steps to writing a paper are different from how the reader consumes the paper (see next slide)
+\end{wideitemize}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Chronological steps to writing a paper}
+\begin{enumerate}
+\item Brainstorming / research question
+\item Broad literature review (to see if idea is novel)
+\item Data
+\item Empirical model
+\item Identification \& Estimation
+\item Results
+\item Introduction
+\item Abstract
+\item Conclusion
+\item Proofreading/polishing (at least 10-30 drafts)
+\end{enumerate}
+\end{frame}
+
+
+
+\begin{frame}{Managing multiple sources of feedback}
+\begin{wideitemize}
+\item Often, three of your advisors will each give you three wildly different pieces of feedback for the same idea
+\item How to triage these? Use your best judgment!
+\item Recognize that you've been thinking of this problem for much longer than your advisors have
+\item Much of research is a matter of taste; as long as what you're doing is not objectively wrong, go ahead with it
+\end{wideitemize}
+\end{frame}
+
+
+
+\begin{frame}{What to do when you're stuck}
+\begin{wideitemize}
+\item Research is difficult; if it weren't, everyone would be doing it
+\item So what should you do when things aren't working?
+    \begin{wideenum}
+    \vspace{5mm}
+    \item ask a classmate if they have any ideas
+    \item ask an AI bot
+    \item visit advisors' office hours (most of the time students don't show up)
+    \item write an email to your advisor, but don't send it! many times just writing out what your problem is will allow your mind to figure out what might be going wrong
+    \end{wideenum}
+\end{wideitemize}
+\end{frame}
+
+
+
+
+
+
+\section{Conclusion}
+\begin{transitionframe}
+  \begin{center}
+    { \Huge \textcolor{black}{Conclusion}}
+  \end{center}
+\end{transitionframe}
+
+
+
+
+\begin{frame}{Conclusion}
+\begin{wideitemize}
+\item It's difficult to transition from being a consumer to a producer of research
+\item Three pillars of success:
+    \begin{wideenum}
+    \vspace{5mm}
+    \item project management and strategically planning your time
+    \item high-frequency feedback from others (including AI bots)
+    \item attitude of perseverance and resilience in the face of failures
+    \end{wideenum}
+\item Finally, don't neglect your personal life!
+\end{wideitemize}
+\end{frame}
+
+\end{document}
